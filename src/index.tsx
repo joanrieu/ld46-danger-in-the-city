@@ -140,19 +140,29 @@ function TowerGrid() {
   );
 }
 
+function Ground() {
+  return (
+    <mesh rotation-x={-Math.PI / 2}>
+      <planeBufferGeometry attach="geometry" args={[200, 200]} />
+      <shadowMaterial attach="material" color="red" />
+    </mesh>
+  );
+}
+
 function Game() {
   return (
     <group>
       <ambientLight intensity={0.7} />
-      <directionalLight position={[0, 1, -2]} intensity={0.3} castShadow />
+      <directionalLight position={[0, 0, -1]} intensity={0.3} />
       <Car />
       <TowerGrid />
+      <Ground />
     </group>
   );
 }
 
 ReactDOM.render(
-  <Canvas>
+  <Canvas concurrent>
     <Suspense fallback={<group />}>
       <Game />
     </Suspense>
