@@ -70,20 +70,22 @@ function Tower({
 
   const [pieces, setPieces] = useState<[number, number, number][]>([]);
   useEffect(() => {
-    const coef = 2;
-    const timeout = setTimeout(
-      () =>
-        setPieces(
-          [...new Array((height / coef) | 0)].map((_, i) => [
-            x + length * (Math.random() - 0.5),
-            5 + i * coef,
-            -y + length * (Math.random() - 0.5),
-          ])
-        ),
-      2 * 60 * 1000 * Math.random()
-    );
-    return () => clearTimeout(timeout);
-  });
+    if (pieces.length === 0) {
+      const coef = 2;
+      const timeout = setTimeout(
+        () =>
+          setPieces(
+            [...new Array((height / coef) | 0)].map((_, i) => [
+              x + length * (Math.random() - 0.5),
+              5 + i * coef,
+              -y + length * (Math.random() - 0.5),
+            ])
+          ),
+        2 * 60 * 1000 * Math.random()
+      );
+      return () => clearTimeout(timeout);
+    }
+  }, [pieces]);
 
   return (
     <group>
