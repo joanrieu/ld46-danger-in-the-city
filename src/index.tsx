@@ -1,9 +1,9 @@
-import React, { Fragment, Suspense, useEffect } from "react";
+import React, { Fragment, Suspense, useState } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader, useThree } from "react-three-fiber";
+import { Vector3, Color } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
-import { Vector3 } from "three";
 
 const keys: Record<string, true> = {};
 document.addEventListener("keydown", (event) => (keys[event.key] = true));
@@ -15,7 +15,8 @@ function Car() {
   const car = gltf.scene;
 
   useFrame(() => {
-    car.translateZ(-1);
+    if (keys.ArrowUp) car.translateZ(-1);
+    if (keys.ArrowDown) car.translateZ(1);
     if (keys.ArrowLeft) car.rotateY(Math.PI / 100);
     if (keys.ArrowRight) car.rotateY(-Math.PI / 100);
 
@@ -32,12 +33,58 @@ function Car() {
   return <primitive object={car} dispose={null} />;
 }
 
+function Tower({
+  position: [x, y],
+  length,
+}: {
+  position: [number, number];
+  length: number;
+}) {
+  const [height] = useState(() => Math.random() * 30 + 5);
+  const [color] = useState(() =>
+    new Color(
+      32 + 5 * Math.round(4 * Math.random()),
+      21 + 5 * Math.round(4 * Math.random()),
+      78 + 5 * Math.round(4 * Math.random())
+    ).multiplyScalar(1 / 255)
+  );
+  return (
+    <mesh position={[x, height / 2, -y]} scale={[length, height, length]}>
+      <boxBufferGeometry attach="geometry" />
+      <meshPhongMaterial attach="material" color={color} />
+    </mesh>
+  );
+}
+
+function TowerGrid() {
+  const diameter = 17;
+  const buildingSize = 30;
+  const roadSize = 15;
+  return (
+    <group>
+      {[...new Array(diameter)].map((_, y) =>
+        [...new Array(diameter)].map((_, x) => (
+          <Tower
+            key={[x, y].toString()}
+            position={[
+              (x - diameter / 2) * (buildingSize + roadSize),
+              (y - diameter / 2) * (buildingSize + roadSize),
+            ]}
+            length={buildingSize}
+          />
+        ))
+      )}
+    </group>
+  );
+}
+
 function Game() {
   return (
     <>
       <ambientLight intensity={0.5} />
       <directionalLight position={[0, 1, -2]} intensity={0.3} />
       <Car />
+      <TowerGrid />
     </>
   );
 }
