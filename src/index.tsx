@@ -1,7 +1,7 @@
-import React, { Fragment, Suspense, useState } from "react";
+import React, { Fragment, Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader, useThree } from "react-three-fiber";
-import { Vector3, Color } from "three";
+import { Color, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
 
@@ -17,9 +17,8 @@ function Car() {
 
   useFrame((state, delta) => {
     time += delta;
-    // if (keys.ArrowUp)
-    car.translateZ(-15 * delta);
-    // if (keys.ArrowDown) car.translateZ(15 * delta);
+    if (keys.ArrowUp) car.translateZ(-15 * delta);
+    if (keys.ArrowDown) car.translateZ(15 * delta);
     if (keys.ArrowLeft) car.rotateY((Math.PI / 3) * delta);
     if (keys.ArrowRight) car.rotateY((-Math.PI / 3) * delta);
 
@@ -56,11 +55,47 @@ function Tower({
       78 + 5 * Math.round(4 * Math.random())
     ).multiplyScalar(1 / 255)
   );
+
+  const [pieces, setPieces] = useState<[number, number, number][]>([]);
+  useEffect(() => {
+    const coef = 2;
+    const timeout = setTimeout(
+      () =>
+        setPieces(
+          [...new Array((height / coef) | 0)].map((_, i) => [
+            x + length * (Math.random() - 0.5),
+            5 + i * coef,
+            -y + length * (Math.random() - 0.5),
+          ])
+        ),
+      2 * 60 * 1000 * Math.random()
+    );
+    return () => clearTimeout(timeout);
+  });
+
   return (
-    <mesh position={[x, height / 2, -y]} scale={[length, height, length]}>
-      <boxBufferGeometry attach="geometry" />
-      <meshPhongMaterial attach="material" color={color} />
-    </mesh>
+    <group>
+      {!pieces.length && (
+        <mesh
+          key="tower"
+          position={[x, height / 2, -y]}
+          scale={[length, height, length]}
+        >
+          <boxBufferGeometry attach="geometry" />
+          <meshPhongMaterial attach="material" color={color} />
+        </mesh>
+      )}
+      {pieces.map((position, i) => (
+        <mesh
+          key={"piece" + i}
+          position={position}
+          scale={new Vector3(3, 4, 5)}
+        >
+          <dodecahedronBufferGeometry attach="geometry" />
+          <meshPhongMaterial attach="material" color={color} />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
@@ -88,18 +123,18 @@ function TowerGrid() {
 
 function Game() {
   return (
-    <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[0, 1, -2]} intensity={0.3} />
+    <group>
+      <ambientLight intensity={0.7} />
+      <directionalLight position={[0, 1, -2]} intensity={0.3} castShadow />
       <Car />
       <TowerGrid />
-    </>
+    </group>
   );
 }
 
 ReactDOM.render(
   <Canvas>
-    <Suspense fallback={<Fragment />}>
+    <Suspense fallback={<group />}>
       <Game />
     </Suspense>
   </Canvas>,
