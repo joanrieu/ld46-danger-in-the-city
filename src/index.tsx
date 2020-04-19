@@ -96,7 +96,12 @@ function Tower({
           scale={[length, height, length]}
         >
           <boxBufferGeometry attach="geometry" />
-          <meshPhongMaterial attach="material" color={color} />
+          <meshToonMaterial
+            attach="material"
+            color={color}
+            specular={new Color("orange")}
+            shininess={10}
+          />
         </mesh>
       )}
       {pieces.map((position, i) => (
