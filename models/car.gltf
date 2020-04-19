@@ -1,0 +1,559 @@
+{
+  "accessors": [
+    {
+      "bufferView": 0,
+      "byteOffset": 720,
+      "componentType": 5125,
+      "count": 768,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 0,
+      "componentType": 5125,
+      "count": 180,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 160,
+      "max": [
+        8.28550604800000645156e-01,
+        3.14268919463677687265e-01,
+        1.17242351786367748900e+00
+      ],
+      "min": [
+        6.28550604800000689565e-01,
+        -2.27027396263677655464e-01,
+        6.31127202136322118520e-01
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 12,
+      "componentType": 5126,
+      "count": 160,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 720,
+      "componentType": 5125,
+      "count": 768,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 0,
+      "componentType": 5125,
+      "count": 180,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 160,
+      "max": [
+        -6.28550604800000467520e-01,
+        3.14268919463677687265e-01,
+        1.17242351786367748900e+00
+      ],
+      "min": [
+        -8.28550604800000423111e-01,
+        -2.27027396263677655464e-01,
+        6.31127202136322118520e-01
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 12,
+      "componentType": 5126,
+      "count": 160,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 720,
+      "componentType": 5125,
+      "count": 768,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 4,
+      "byteOffset": 0,
+      "componentType": 5125,
+      "count": 180,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 5,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 160,
+      "max": [
+        8.28550604800000645156e-01,
+        3.14268919463677687265e-01,
+        -7.75411259736322966418e-01
+      ],
+      "min": [
+        6.28550604800000689565e-01,
+        -2.27027396263677655464e-01,
+        -1.31670757546367833690e+00
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 5,
+      "byteOffset": 12,
+      "componentType": 5126,
+      "count": 160,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 6,
+      "byteOffset": 720,
+      "componentType": 5125,
+      "count": 768,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 6,
+      "byteOffset": 0,
+      "componentType": 5125,
+      "count": 180,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 7,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 160,
+      "max": [
+        -6.28550604800000467520e-01,
+        3.14268919463677687265e-01,
+        -7.75411259736322966418e-01
+      ],
+      "min": [
+        -8.28550604800000423111e-01,
+        -2.27027396263677655464e-01,
+        -1.31670757546367833690e+00
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 7,
+      "byteOffset": 12,
+      "componentType": 5126,
+      "count": 160,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 2136,
+      "componentType": 5125,
+      "count": 42,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 2088,
+      "componentType": 5125,
+      "count": 12,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 1992,
+      "componentType": 5125,
+      "count": 24,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 8,
+      "byteOffset": 0,
+      "componentType": 5125,
+      "count": 498,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 9,
+      "byteOffset": 0,
+      "componentType": 5126,
+      "count": 464,
+      "max": [
+        7.85403410931946099893e-01,
+        6.66348851132246844386e-01,
+        1.36229933304142347694e+00
+      ],
+      "min": [
+        -7.85405349968125721105e-01,
+        0.00000000000000000000e+00,
+        -1.63770066695857696715e+00
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "byteOffset": 12,
+      "componentType": 5126,
+      "count": 464,
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 9,
+      "byteOffset": 24,
+      "componentType": 5126,
+      "count": 464,
+      "type": "VEC4"
+    }
+  ],
+  "asset": {
+    "generator": "Wings 3D 2.2.4",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 3792,
+      "byteOffset": 0
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3840,
+      "byteOffset": 3792,
+      "byteStride": 24
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3792,
+      "byteOffset": 7632
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3840,
+      "byteOffset": 11424,
+      "byteStride": 24
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3792,
+      "byteOffset": 15264
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3840,
+      "byteOffset": 19056,
+      "byteStride": 24
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3792,
+      "byteOffset": 22896
+    },
+    {
+      "buffer": 0,
+      "byteLength": 3840,
+      "byteOffset": 26688,
+      "byteStride": 24
+    },
+    {
+      "buffer": 0,
+      "byteLength": 2304,
+      "byteOffset": 30528
+    },
+    {
+      "buffer": 0,
+      "byteLength": 18560,
+      "byteOffset": 32832,
+      "byteStride": 40
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 51392,
+      "uri": "car.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00
+      ],
+      "name": "cap",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          6.70588235294117596119e-01,
+          6.70588235294117596119e-01,
+          6.70588235294117596119e-01,
+          1.00000000000000000000e+00
+        ],
+        "metallicFactor": 0.00000000000000000000e+00,
+        "roughnessFactor": 3.49999999999999977796e-01
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00
+      ],
+      "name": "tire",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.37254901960784325698e-01,
+          1.37254901960784325698e-01,
+          1.37254901960784325698e-01,
+          1.00000000000000000000e+00
+        ],
+        "metallicFactor": 0.00000000000000000000e+00,
+        "roughnessFactor": 1.00000000000000000000e+00
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00
+      ],
+      "name": "chassis",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.00000000000000000000e+00,
+          3.68627450980392179503e-01,
+          6.19607843137254921118e-01,
+          1.00000000000000000000e+00
+        ],
+        "metallicFactor": 1.00000000000000000000e+00,
+        "roughnessFactor": 8.00000000000000044409e-01
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        1.00000000000000000000e+00,
+        1.00000000000000000000e+00,
+        1.00000000000000000000e+00
+      ],
+      "name": "headlights",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          1.00000000000000000000e+00,
+          1.00000000000000000000e+00,
+          1.00000000000000000000e+00,
+          1.00000000000000000000e+00
+        ],
+        "metallicFactor": 1.00000000000000005551e-01,
+        "roughnessFactor": 8.00000000000000044409e-01
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        4.10958904109589018283e-01,
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00
+      ],
+      "name": "taillights",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          4.04109589041095895734e-01,
+          0.00000000000000000000e+00,
+          0.00000000000000000000e+00,
+          1.00000000000000000000e+00
+        ],
+        "metallicFactor": 1.00000000000000005551e-01,
+        "roughnessFactor": 8.00000000000000044409e-01
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00,
+        0.00000000000000000000e+00
+      ],
+      "name": "windows",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.00000000000000000000e+00,
+          0.00000000000000000000e+00,
+          0.00000000000000000000e+00,
+          1.00000000000000000000e+00
+        ],
+        "metallicFactor": 5.00000000000000000000e-01,
+        "roughnessFactor": 0.00000000000000000000e+00
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Wheel4",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 3,
+            "POSITION": 2
+          },
+          "indices": 1,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "NORMAL": 3,
+            "POSITION": 2
+          },
+          "indices": 0,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "Wheel3",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6
+          },
+          "indices": 5,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "NORMAL": 7,
+            "POSITION": 6
+          },
+          "indices": 4,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "Wheel2",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 11,
+            "POSITION": 10
+          },
+          "indices": 9,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "NORMAL": 11,
+            "POSITION": 10
+          },
+          "indices": 8,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "Wheel1",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 15,
+            "POSITION": 14
+          },
+          "indices": 13,
+          "material": 0
+        },
+        {
+          "attributes": {
+            "NORMAL": 15,
+            "POSITION": 14
+          },
+          "indices": 12,
+          "material": 1
+        }
+      ]
+    },
+    {
+      "name": "Chassis",
+      "primitives": [
+        {
+          "attributes": {
+            "COLOR_0": 22,
+            "NORMAL": 21,
+            "POSITION": 20
+          },
+          "indices": 19,
+          "material": 2
+        },
+        {
+          "attributes": {
+            "COLOR_0": 22,
+            "NORMAL": 21,
+            "POSITION": 20
+          },
+          "indices": 18,
+          "material": 3
+        },
+        {
+          "attributes": {
+            "COLOR_0": 22,
+            "NORMAL": 21,
+            "POSITION": 20
+          },
+          "indices": 17,
+          "material": 4
+        },
+        {
+          "attributes": {
+            "COLOR_0": 22,
+            "NORMAL": 21,
+            "POSITION": 20
+          },
+          "indices": 16,
+          "material": 5
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "mesh": 0,
+      "name": "Wheel4"
+    },
+    {
+      "mesh": 1,
+      "name": "Wheel3"
+    },
+    {
+      "mesh": 2,
+      "name": "Wheel2"
+    },
+    {
+      "mesh": 3,
+      "name": "Wheel1"
+    },
+    {
+      "mesh": 4,
+      "name": "Chassis"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "nodes": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ]
+    }
+  ]
+}

@@ -2,12 +2,12 @@
 
 importer="scene"
 type="PackedScene"
-path="res://.import/wheel.glb-d99cda58c29badf581a78c6fffdfce8f.scn"
+path="res://.import/car.gltf-dd9acb6689dc31b75b5154ee66914089.scn"
 
 [deps]
 
-source_file="res://models/wheel.glb"
-dest_files=[ "res://.import/wheel.glb-d99cda58c29badf581a78c6fffdfce8f.scn" ]
+source_file="res://models/car.gltf"
+dest_files=[ "res://.import/car.gltf-dd9acb6689dc31b75b5154ee66914089.scn" ]
 
 [params]
 
