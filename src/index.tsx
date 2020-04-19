@@ -13,21 +13,29 @@ function Car() {
   const { camera } = useThree();
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
+  let time = 0;
 
-  useFrame(() => {
-    if (keys.ArrowUp) car.translateZ(-1);
-    if (keys.ArrowDown) car.translateZ(1);
-    if (keys.ArrowLeft) car.rotateY(Math.PI / 100);
-    if (keys.ArrowRight) car.rotateY(-Math.PI / 100);
+  useFrame((state, delta) => {
+    time += delta;
+    // if (keys.ArrowUp)
+    car.translateZ(-15 * delta);
+    // if (keys.ArrowDown) car.translateZ(15 * delta);
+    if (keys.ArrowLeft) car.rotateY((Math.PI / 3) * delta);
+    if (keys.ArrowRight) car.rotateY((-Math.PI / 3) * delta);
 
-    const coef = 0.7;
-    camera.position
-      .multiplyScalar(coef)
-      .addScaledVector(
-        new Vector3(0, 2, 5).applyQuaternion(car.quaternion).add(car.position),
-        1 - coef
-      );
-    camera.lookAt(car.position.clone().add(new Vector3(0, 1, 0)));
+    while (time >= 0.001) {
+      time -= 0.001;
+      const coef = 0.993;
+      camera.position
+        .multiplyScalar(coef)
+        .addScaledVector(
+          new Vector3(0, 2, 5)
+            .applyQuaternion(car.quaternion)
+            .add(car.position),
+          1 - coef
+        );
+      camera.lookAt(car.position.clone().add(new Vector3(0, 1, 0)));
+    }
   });
 
   return <primitive object={car} dispose={null} />;
@@ -57,9 +65,9 @@ function Tower({
 }
 
 function TowerGrid() {
-  const diameter = 17;
-  const buildingSize = 30;
-  const roadSize = 15;
+  const [diameter] = useState(() => (17 + 5 * Math.random()) | 1);
+  const [buildingSize] = useState(() => 20 + 10 * Math.random());
+  const [roadSize] = useState(() => 10 + 5 * Math.random());
   return (
     <group>
       {[...new Array(diameter)].map((_, y) =>
