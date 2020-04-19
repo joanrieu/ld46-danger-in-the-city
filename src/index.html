@@ -7,29 +7,52 @@
     <style>
       html,
       body,
-      #game {
+      body > * {
         margin: 0;
         padding: 0;
         height: 100%;
-        background: linear-gradient(
+      }
+
+      body {
+        display: grid;
+      }
+
+      body > * {
+        grid-row: 1;
+        grid-column: 1;
+      }
+
+      #game {
+        background-image: linear-gradient(
+            rgb(12, 11, 97),
+            rgb(64, 0, 148),
+            orange 50%,
+            rgb(80, 0, 80) 50%,
+            rgb(43, 0, 43),
+            black
+          ),
+          linear-gradient(
             90deg,
             rgba(0, 0, 0, 0.8),
             transparent,
             rgba(0, 0, 0, 0.8)
-          ),
-          linear-gradient(
-            rgb(12, 11, 97),
-            rgb(64, 0, 148),
-            orange 40%,
-            rgb(80, 0, 80) 40%,
-            rgb(43, 0, 43),
-            black
           );
+      }
+      #overlay {
+        z-index: 1;
+        pointer-events: none;
+        background-image: linear-gradient(
+          rgba(255, 255, 255, 0.164) 25%,
+          transparent 25%
+        );
+        background-size: auto 12px;
+        mix-blend-mode: overlay;
       }
     </style>
   </head>
   <body>
     <div id="game"></div>
+    <div id="overlay"></div>
     <script src="index.tsx"></script>
   </body>
 </html>
