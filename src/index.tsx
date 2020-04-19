@@ -1,4 +1,4 @@
-import React, { Fragment, Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader, useThree } from "react-three-fiber";
 import { Color, Vector3 } from "three";
@@ -10,21 +10,33 @@ document.addEventListener("keydown", (event) => (keys[event.key] = true));
 document.addEventListener("keyup", (event) => delete keys[event.key]);
 
 function Car() {
-  const { camera } = useThree();
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
-  let time = 0;
+  const fixedStepSeconds = 0.001;
+  const maxSteeringDelaySeconds = 0.4;
+  const maxSteeringDelaySteps = maxSteeringDelaySeconds / fixedStepSeconds;
+  const maxSteeringAngle = 0.0012;
+  let leftoverTime = 0;
+  let steeringSteps = 0;
 
-  useFrame((state, delta) => {
-    time += delta;
-    if (keys.ArrowUp) car.translateZ(-15 * delta);
-    if (keys.ArrowDown) car.translateZ(15 * delta);
-    if (keys.ArrowLeft) car.rotateY((Math.PI / 3) * delta);
-    if (keys.ArrowRight) car.rotateY((-Math.PI / 3) * delta);
+  useFrame(({ camera }, delta) => {
+    leftoverTime += delta;
+    while (leftoverTime >= fixedStepSeconds) {
+      leftoverTime -= fixedStepSeconds;
 
-    while (time >= 0.001) {
-      time -= 0.001;
-      const coef = 0.993;
+      if (keys.ArrowUp) car.translateZ(-15e-3);
+      if (keys.ArrowDown) car.translateZ(15e-3);
+      if (keys.ArrowLeft) ++steeringSteps;
+      else if (keys.ArrowRight) --steeringSteps;
+      else if (steeringSteps > 0) --steeringSteps;
+      else if (steeringSteps < 0) ++steeringSteps;
+      steeringSteps = Math.min(
+        Math.max(steeringSteps, -maxSteeringDelaySteps),
+        maxSteeringDelaySteps
+      );
+      car.rotateY((steeringSteps / maxSteeringDelaySteps) * maxSteeringAngle);
+
+      const coef = 0.99;
       camera.position
         .multiplyScalar(coef)
         .addScaledVector(
@@ -33,7 +45,7 @@ function Car() {
             .add(car.position),
           1 - coef
         );
-      camera.lookAt(car.position.clone().add(new Vector3(0, 1, 0)));
+      camera.setRotationFromQuaternion(car.quaternion);
     }
   });
 
