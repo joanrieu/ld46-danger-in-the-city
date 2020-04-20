@@ -349,7 +349,7 @@ function GameScreen({ setScreen }: ScreenProps) {
   );
 }
 
-function TitleScreenScene() {
+function TitleScreenCar() {
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
   car.position.set(0, 0, 0);
@@ -372,7 +372,7 @@ function TitleScreen({ setScreen }: ScreenProps) {
   return (
     <>
       <Suspense fallback={<div />}>
-        <TitleScreenScene />
+        <TitleScreenCar />
       </Suspense>
       <div
         style={{
@@ -382,6 +382,7 @@ function TitleScreen({ setScreen }: ScreenProps) {
           textAlign: "center",
           placeSelf: "center",
           mixBlendMode: "luminosity",
+          transform: "rotateY(-20deg) translateX(15vmin) rotateX(10deg)",
         }}
       >
         <div style={{ fontSize: "18vmin" }}>Danger</div>
