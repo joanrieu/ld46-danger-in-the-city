@@ -9,9 +9,34 @@ const keys: Record<string, true> = {};
 document.addEventListener("keydown", (event) => (keys[event.key] = true));
 document.addEventListener("keyup", (event) => delete keys[event.key]);
 
-function Car() {
+function Car({ onDead }: { onDead: () => void }) {
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
+
+  // COLLISIONS
+
+  const [colliding, setColliding] = useState(false);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const towers =
+        car.parent?.children.find((o) => o.children.length > 100)?.children ||
+        [];
+      const collision = towers
+        .filter(
+          (t) => t.children[0].position.manhattanDistanceTo(car.position) < 100
+        )
+        .flatMap((t) => t.children)
+        // TODO: check for o.name === "tower" and use size
+        .find((o) => o.position.manhattanDistanceTo(car.position) < 7);
+      if (collision) {
+        setColliding(true);
+        onDead();
+      }
+    }, 100);
+    return () => clearInterval(interval);
+  }, [car]);
+
+  // PHYSICS
 
   const fixedStepSeconds = 0.001;
   let leftoverTime = 0;
@@ -27,9 +52,13 @@ function Car() {
   let speedSteps = 0;
 
   useFrame(({ camera }, delta) => {
+    if (colliding) return;
+
     leftoverTime += delta;
     while (leftoverTime >= fixedStepSeconds) {
       leftoverTime -= fixedStepSeconds;
+
+      // ACCELERATION
 
       if (keys.ArrowUp && speedSteps < maxSpeedSteps) ++speedSteps;
       else if (keys.ArrowDown && speedSteps > -maxSpeedSteps / 10)
@@ -37,6 +66,8 @@ function Car() {
       else if (speedSteps > 0) speedSteps -= 0.3;
       else if (speedSteps < 0) speedSteps += 0.3;
       car.translateZ(-(speedSteps / maxSpeedSteps) * maxSpeed);
+
+      // STEERING
 
       if (keys.ArrowLeft && steeringSteps < maxSteeringSteps) ++steeringSteps;
       else if (keys.ArrowRight && steeringSteps > -maxSteeringSteps)
@@ -49,6 +80,8 @@ function Car() {
           maxSteeringAngle *
           Math.min(1, speedSteps / (maxSpeedSteps / 10))
       );
+
+      // CAMERA
 
       const coef = 0.99;
       camera.position
@@ -136,6 +169,7 @@ function Tower({
     <group>
       {!pieces.length && (
         <mesh
+          name="tower"
           key="tower"
           position={[x, height / 2, -y]}
           scale={[length, height, length]}
@@ -201,13 +235,13 @@ function Ground() {
   );
 }
 
-function Game() {
+function Game({ onDead }: { onDead: () => void }) {
   return (
     <group>
       <ambientLight intensity={0.7} />
       <directionalLight position={[0, 0, -1]} intensity={0.3} />
       <directionalLight position={[0, 0, 1]} intensity={0.1} />
-      <Car />
+      <Car onDead={onDead} />
       <TowerGrid />
       <Ground />
     </group>
@@ -256,11 +290,20 @@ type ScreenProps = {
 };
 
 function GameScreen({ setScreen }: ScreenProps) {
+  const [dead, setDead] = useState(false);
+  useEffect(() => {
+    if (dead) {
+      const timeout = setTimeout(() => {
+        setScreen(() => TitleScreen);
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  });
   return (
     <>
       <Canvas concurrent>
         <Suspense fallback={<group />}>
-          <Game />
+          <Game onDead={() => setDead(true)} />
         </Suspense>
       </Canvas>
       <Hud />
