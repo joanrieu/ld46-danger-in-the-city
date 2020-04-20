@@ -1,7 +1,14 @@
 import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Canvas, useFrame, useLoader } from "react-three-fiber";
-import { Color, Vector3, Mesh } from "three";
+import { Canvas, useFrame, useLoader, useResource } from "react-three-fiber";
+import {
+  Color,
+  Vector3,
+  Mesh,
+  MeshPhongMaterial,
+  Material,
+  Geometry,
+} from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
 
@@ -84,7 +91,11 @@ function Tower({
   );
 
   const [pieces, setPieces] = useState<
-    { position: [number, number, number]; mesh?: Mesh | null }[]
+    {
+      position: [number, number, number];
+      direction: [number, number];
+      mesh?: Mesh | null;
+    }[]
   >([]);
   useEffect(() => {
     if (pieces.length === 0) {
@@ -94,28 +105,39 @@ function Tower({
           setPieces(
             [...new Array((height / coef) | 0)].map((_, i) => ({
               position: [
-                x + length * (Math.random() - 0.5),
+                x + length * (Math.random() - 0.5) * 1.5,
                 5 + i * coef,
-                -y + length * (Math.random() - 0.5),
+                -y + length * (Math.random() - 0.5) * 1.5,
               ],
+              direction: [Math.random() * 2 - 1, Math.random() * 2 - 1],
             }))
           ),
-        2 * 60 * 1000 * Math.random()
+        30 * 1000 * Math.random()
       );
       return () => clearTimeout(timeout);
     }
   }, [pieces]);
 
+  let active = true;
   useFrame((state, delta) => {
+    if (!active) return;
+    active = false;
     for (const piece of pieces) {
       const mesh = piece.mesh;
       if (mesh) {
-        if (mesh.position.y > mesh.scale.y)
+        if (mesh.position.y > mesh.scale.y) {
           mesh.translateY((-15 * delta) / Math.max(1, mesh.position.y / 10));
+          mesh.translateX(delta * 15 * piece.direction[0]);
+          mesh.translateZ(delta * 15 * piece.direction[1]);
+          active = true;
+        }
         if (mesh.position.y < mesh.scale.y) mesh.position.y = mesh.scale.y;
       }
     }
   });
+
+  const [pieceGeometryRef, pieceGeometry] = useResource<Geometry>();
+  const [pieceMaterialRef, pieceMaterial] = useResource<Material>();
 
   return (
     <group>
@@ -134,25 +156,31 @@ function Tower({
           />
         </mesh>
       )}
+      <dodecahedronBufferGeometry ref={pieceGeometryRef} />
+      <meshPhongMaterial ref={pieceMaterialRef} color={color} />
       {pieces.map((piece, i) => (
         <mesh
           ref={(mesh) => (piece.mesh = mesh)}
           key={"piece" + i}
           position={piece.position}
-          scale={new Vector3(3, 4, 5)}
-        >
-          <dodecahedronBufferGeometry attach="geometry" />
-          <meshPhongMaterial attach="material" color={color} />
-        </mesh>
+          scale={[
+            3 + 2 * Math.random(),
+            3 + 2 * Math.random(),
+            3 + 2 * Math.random(),
+          ]}
+          rotation-y={Math.random() * Math.PI}
+          material={pieceMaterial}
+          geometry={pieceGeometry}
+        ></mesh>
       ))}
     </group>
   );
 }
 
 function TowerGrid() {
-  const [diameter] = useState(() => (17 + 5 * Math.random()) | 1);
-  const [buildingSize] = useState(() => 20 + 10 * Math.random());
-  const [roadSize] = useState(() => 10 + 5 * Math.random());
+  const diameter = 25;
+  const buildingSize = 20;
+  const roadSize = 10;
   return (
     <group>
       {[...new Array(diameter)].map((_, y) =>
