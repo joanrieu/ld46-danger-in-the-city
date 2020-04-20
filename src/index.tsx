@@ -1,14 +1,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader, useResource } from "react-three-fiber";
-import {
-  Color,
-  Vector3,
-  Mesh,
-  MeshPhongMaterial,
-  Material,
-  Geometry,
-} from "three";
+import { Color, Geometry, Material, Mesh, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
 
@@ -220,11 +213,63 @@ function Game() {
   );
 }
 
+function Hud() {
+  const [timer, setTimer] = useState(30);
+  useEffect(() => {
+    if (timer > 0) {
+      const timeout = setTimeout(() => setTimer(timer - 1), 1000);
+      return () => clearTimeout(timeout);
+    }
+  }, [timer]);
+  return (
+    <div
+      style={{
+        position: "absolute",
+        bottom: 0,
+        left: 0,
+        display: "grid",
+        perspective: "100vmin",
+        mixBlendMode: "luminosity",
+      }}
+    >
+      <svg
+        viewBox="0 0 434 257"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          placeSelf: "bottom",
+          gridRow: 1,
+          gridColumn: 1,
+          width: "30%",
+          background: "#ffffff33",
+          transform: "translateZ(-30vmin) rotateY(30deg) rotateX(30deg)",
+        }}
+      >
+        <text
+          fontWeight="bold"
+          textAnchor="start"
+          fontFamily="Helvetica, Arial, sans-serif"
+          fontSize="216"
+          y="204"
+          x="52"
+          strokeWidth="8"
+          stroke="#7AD6CA"
+          fill="#0E353B"
+        >
+          {timer.toString().padStart(2, "0")}&Prime;
+        </text>
+      </svg>
+    </div>
+  );
+}
+
 ReactDOM.render(
-  <Canvas concurrent>
-    <Suspense fallback={<group />}>
-      <Game />
-    </Suspense>
-  </Canvas>,
+  <>
+    <Canvas concurrent>
+      <Suspense fallback={<group />}>
+        <Game />
+      </Suspense>
+    </Canvas>
+    <Hud />
+  </>,
   document.getElementById("game")
 );
