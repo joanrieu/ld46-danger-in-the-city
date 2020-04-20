@@ -52,7 +52,10 @@ function Car({ onDead }: { onDead: () => void }) {
   let speedSteps = 0;
 
   useFrame(({ camera }, delta) => {
-    if (colliding) return;
+    if (colliding) {
+      car.rotateX(-delta * (Math.PI / 12));
+      return;
+    }
 
     leftoverTime += delta;
     while (leftoverTime >= fixedStepSeconds) {
