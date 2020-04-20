@@ -1,6 +1,6 @@
 import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
-import { Canvas, useFrame, useLoader, useThree } from "react-three-fiber";
+import { Canvas, useFrame, useLoader } from "react-three-fiber";
 import { Color, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
@@ -12,40 +12,55 @@ document.addEventListener("keyup", (event) => delete keys[event.key]);
 function Car() {
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
+
   const fixedStepSeconds = 0.001;
-  const maxSteeringDelaySeconds = 0.4;
-  const maxSteeringDelaySteps = maxSteeringDelaySeconds / fixedStepSeconds;
-  const maxSteeringAngle = 0.0012;
   let leftoverTime = 0;
+
+  const maxSteeringSeconds = 0.4;
+  const maxSteeringSteps = maxSteeringSeconds / fixedStepSeconds;
+  const maxSteeringAngle = 0.0012;
   let steeringSteps = 0;
+
+  const maxSpeedSeconds = 3;
+  const maxSpeedSteps = maxSpeedSeconds / fixedStepSeconds;
+  const maxSpeed = 20e-3;
+  let speedSteps = 0;
 
   useFrame(({ camera }, delta) => {
     leftoverTime += delta;
     while (leftoverTime >= fixedStepSeconds) {
       leftoverTime -= fixedStepSeconds;
 
-      if (keys.ArrowUp) car.translateZ(-15e-3);
-      if (keys.ArrowDown) car.translateZ(15e-3);
-      if (keys.ArrowLeft) ++steeringSteps;
-      else if (keys.ArrowRight) --steeringSteps;
+      if (keys.ArrowUp && speedSteps < maxSpeedSteps) ++speedSteps;
+      else if (keys.ArrowDown && speedSteps > -maxSpeedSteps / 10)
+        speedSteps -= 3;
+      else if (speedSteps > 0) speedSteps -= 0.3;
+      else if (speedSteps < 0) speedSteps += 0.3;
+      car.translateZ(-(speedSteps / maxSpeedSteps) * maxSpeed);
+
+      if (keys.ArrowLeft && steeringSteps < maxSteeringSteps) ++steeringSteps;
+      else if (keys.ArrowRight && steeringSteps > -maxSteeringSteps)
+        --steeringSteps;
       else if (steeringSteps > 0) --steeringSteps;
       else if (steeringSteps < 0) ++steeringSteps;
-      steeringSteps = Math.min(
-        Math.max(steeringSteps, -maxSteeringDelaySteps),
-        maxSteeringDelaySteps
+
+      car.rotateY(
+        (steeringSteps / maxSteeringSteps) *
+          maxSteeringAngle *
+          Math.min(1, speedSteps / (maxSpeedSteps / 10))
       );
-      car.rotateY((steeringSteps / maxSteeringDelaySteps) * maxSteeringAngle);
 
       const coef = 0.99;
       camera.position
         .multiplyScalar(coef)
         .addScaledVector(
-          new Vector3(0, 2, 5)
+          new Vector3(-2 * (1 - speedSteps / maxSpeedSteps), 1, 3)
             .applyQuaternion(car.quaternion)
             .add(car.position),
           1 - coef
         );
       camera.setRotationFromQuaternion(car.quaternion);
+      camera.rotateY(-(Math.PI / 6) * (1 - speedSteps / maxSpeedSteps));
     }
   });
 
