@@ -285,6 +285,30 @@ function Hud() {
   );
 }
 
+function DeathSplash() {
+  return (
+    <div
+      id="deathsplash"
+      style={{
+        width: "50vmin",
+        height: "50vmin",
+        placeSelf: "center",
+        backgroundImage: "radial-gradient(orange, yellow, red, red)",
+        transform: "scale(0)",
+        borderRadius: "100%",
+        animation: "deathsplash 2s",
+      }}
+    >
+      <style>{`
+        @keyframes deathsplash {
+          from { transform: scale(1e-1); opacity: 1; }
+          to { transform: scale(1e2); opacity: 0; }
+        }
+      `}</style>
+    </div>
+  );
+}
+
 type ScreenProps = {
   setScreen: (screen: () => (props: ScreenProps) => JSX.Element) => void;
 };
@@ -295,7 +319,7 @@ function GameScreen({ setScreen }: ScreenProps) {
     if (dead) {
       const timeout = setTimeout(() => {
         setScreen(() => TitleScreen);
-      }, 2000);
+      }, 1000);
       return () => clearTimeout(timeout);
     }
   });
@@ -306,7 +330,8 @@ function GameScreen({ setScreen }: ScreenProps) {
           <Game onDead={() => setDead(true)} />
         </Suspense>
       </Canvas>
-      <Hud />
+      {!dead && <Hud />}
+      {dead && <DeathSplash />}
     </>
   );
 }
@@ -314,6 +339,8 @@ function GameScreen({ setScreen }: ScreenProps) {
 function TitleScreenScene() {
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
+  car.position.set(0, 0, 0);
+  car.rotation.set(0, 0, 0);
   return (
     <Canvas>
       <ambientLight intensity={0.5} />
