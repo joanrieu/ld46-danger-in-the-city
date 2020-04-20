@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader } from "react-three-fiber";
-import { Color, Vector3 } from "three";
+import { Color, Vector3, Mesh } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
 
@@ -83,24 +83,39 @@ function Tower({
     ).multiplyScalar(1 / 255)
   );
 
-  const [pieces, setPieces] = useState<[number, number, number][]>([]);
+  const [pieces, setPieces] = useState<
+    { position: [number, number, number]; mesh?: Mesh | null }[]
+  >([]);
   useEffect(() => {
     if (pieces.length === 0) {
       const coef = 2;
       const timeout = setTimeout(
         () =>
           setPieces(
-            [...new Array((height / coef) | 0)].map((_, i) => [
-              x + length * (Math.random() - 0.5),
-              5 + i * coef,
-              -y + length * (Math.random() - 0.5),
-            ])
+            [...new Array((height / coef) | 0)].map((_, i) => ({
+              position: [
+                x + length * (Math.random() - 0.5),
+                5 + i * coef,
+                -y + length * (Math.random() - 0.5),
+              ],
+            }))
           ),
         2 * 60 * 1000 * Math.random()
       );
       return () => clearTimeout(timeout);
     }
   }, [pieces]);
+
+  useFrame((state, delta) => {
+    for (const piece of pieces) {
+      const mesh = piece.mesh;
+      if (mesh) {
+        if (mesh.position.y > mesh.scale.y)
+          mesh.translateY((-15 * delta) / Math.max(1, mesh.position.y / 10));
+        if (mesh.position.y < mesh.scale.y) mesh.position.y = mesh.scale.y;
+      }
+    }
+  });
 
   return (
     <group>
@@ -119,10 +134,11 @@ function Tower({
           />
         </mesh>
       )}
-      {pieces.map((position, i) => (
+      {pieces.map((piece, i) => (
         <mesh
+          ref={(mesh) => (piece.mesh = mesh)}
           key={"piece" + i}
-          position={position}
+          position={piece.position}
           scale={new Vector3(3, 4, 5)}
         >
           <dodecahedronBufferGeometry attach="geometry" />
