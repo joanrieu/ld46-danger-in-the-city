@@ -1,7 +1,7 @@
 import React, { Suspense, useEffect, useState } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader, useResource } from "react-three-fiber";
-import { Color, Geometry, Material, Mesh, Vector3 } from "three";
+import { Color, Geometry, Group, Material, Mesh, Vector3 } from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import carGltfUrl from "./car.glb";
 
@@ -268,37 +268,59 @@ function GameScreen({ setScreen }: ScreenProps) {
   );
 }
 
+function TitleScreenScene() {
+  const gltf = useLoader(GLTFLoader, carGltfUrl);
+  const car = gltf.scene;
+  return (
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[0, 3, 1]} />
+      <group
+        position={[-3, -1.5, 1]}
+        ref={(g: Group | null) => g?.lookAt(-20, -2, -10)}
+      >
+        <primitive object={car} dispose={null} />
+      </group>
+    </Canvas>
+  );
+}
+
 function TitleScreen({ setScreen }: ScreenProps) {
   return (
-    <div
-      style={{
-        fontSize: "15vmin",
-        color: "#222",
-        textShadow: "0 0 1vmin white",
-        textAlign: "center",
-        placeSelf: "center",
-        mixBlendMode: "luminosity",
-      }}
-    >
-      <div style={{ fontSize: "18vmin" }}>Danger</div>
-      in the City
-      <button
-        autoFocus
-        onClick={() => setScreen(() => GameScreen)}
+    <>
+      <Suspense fallback={<div />}>
+        <TitleScreenScene />
+      </Suspense>
+      <div
         style={{
-          fontSize: "7vmin",
-          fontWeight: "bold",
-          padding: "2vmin 5vmin",
-          background: "#ffffffcc",
-          borderRadius: "1vmin",
-          display: "block",
-          margin: "5vmin auto",
-          outline: "none",
+          fontSize: "15vmin",
+          color: "#222",
+          textShadow: "0 0 1vmin white",
+          textAlign: "center",
+          placeSelf: "center",
+          mixBlendMode: "luminosity",
         }}
       >
-        Play
-      </button>
-    </div>
+        <div style={{ fontSize: "18vmin" }}>Danger</div>
+        in the City
+        <button
+          autoFocus
+          onClick={() => setScreen(() => GameScreen)}
+          style={{
+            fontSize: "7vmin",
+            fontWeight: "bold",
+            padding: "2vmin 5vmin",
+            background: "#ffffffcc",
+            borderRadius: "1vmin",
+            display: "block",
+            margin: "5vmin auto",
+            outline: "none",
+          }}
+        >
+          Play
+        </button>
+      </div>
+    </>
   );
 }
 
