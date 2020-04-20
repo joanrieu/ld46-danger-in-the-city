@@ -26,8 +26,18 @@ function Car({ onDead }: { onDead: () => void }) {
           (t) => t.children[0].position.manhattanDistanceTo(car.position) < 100
         )
         .flatMap((t) => t.children)
-        // TODO: check for o.name === "tower" and use size
-        .find((o) => o.position.manhattanDistanceTo(car.position) < 7);
+        .find((o) => {
+          if (o.name === "tower") {
+            const diff = o.position.clone().sub(car.position);
+            const d1 = Math.abs(diff.x);
+            const d2 = Math.abs(diff.z);
+            const carSize = 2;
+            return (
+              d1 < (o.scale.x + carSize) / 2 && d2 < (o.scale.z + carSize) / 2
+            );
+          }
+          return o.position.manhattanDistanceTo(car.position) < 7;
+        });
       if (collision) {
         setColliding(true);
         onDead();
