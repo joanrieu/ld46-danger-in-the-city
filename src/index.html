@@ -24,6 +24,9 @@
       }
 
       #game {
+        display: grid;
+        height: 100%;
+        perspective: 100vmin;
         background-image: linear-gradient(
             rgb(12, 11, 97),
             rgb(64, 0, 148),
@@ -40,7 +43,12 @@
           );
       }
 
+      #game > * {
+        grid-area: 1 / 1;
+      }
+
       #overlay {
+        pointer-events: none;
         background-image: linear-gradient(
           rgba(255, 255, 255, 0.164) 25%,
           transparent 25%

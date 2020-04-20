@@ -164,7 +164,7 @@ function Tower({
           rotation-y={Math.random() * Math.PI}
           material={pieceMaterial}
           geometry={pieceGeometry}
-        ></mesh>
+        />
       ))}
     </group>
   );
@@ -206,6 +206,7 @@ function Game() {
     <group>
       <ambientLight intensity={0.7} />
       <directionalLight position={[0, 0, -1]} intensity={0.3} />
+      <directionalLight position={[0, 0, 1]} intensity={0.1} />
       <Car />
       <TowerGrid />
       <Ground />
@@ -222,54 +223,88 @@ function Hud() {
     }
   }, [timer]);
   return (
-    <div
+    <svg
+      viewBox="0 0 434 257"
+      xmlns="http://www.w3.org/2000/svg"
       style={{
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        display: "grid",
-        perspective: "100vmin",
+        placeSelf: "end start",
+        width: "30%",
+        background: "#ffffff33",
+        transform: "translateZ(-30vmin) rotateY(30deg) rotateX(30deg)",
         mixBlendMode: "luminosity",
       }}
     >
-      <svg
-        viewBox="0 0 434 257"
-        xmlns="http://www.w3.org/2000/svg"
+      <text
+        fontWeight="bold"
+        textAnchor="start"
+        fontFamily="Helvetica, Arial, sans-serif"
+        fontSize="216"
+        y="204"
+        x="52"
+        strokeWidth="8"
+        stroke="#7AD6CA"
+        fill="#0E353B"
+      >
+        {timer.toString().padStart(2, "0")}&Prime;
+      </text>
+    </svg>
+  );
+}
+
+type ScreenProps = {
+  setScreen: (screen: () => (props: ScreenProps) => JSX.Element) => void;
+};
+
+function GameScreen({ setScreen }: ScreenProps) {
+  return (
+    <>
+      <Canvas concurrent>
+        <Suspense fallback={<group />}>
+          <Game />
+        </Suspense>
+      </Canvas>
+      <Hud />
+    </>
+  );
+}
+
+function TitleScreen({ setScreen }: ScreenProps) {
+  return (
+    <div
+      style={{
+        fontSize: "15vmin",
+        color: "#222",
+        textShadow: "0 0 1vmin white",
+        textAlign: "center",
+        placeSelf: "center",
+        mixBlendMode: "luminosity",
+      }}
+    >
+      <div style={{ fontSize: "18vmin" }}>Danger</div>
+      in the City
+      <button
+        autoFocus
+        onClick={() => setScreen(() => GameScreen)}
         style={{
-          placeSelf: "bottom",
-          gridRow: 1,
-          gridColumn: 1,
-          width: "30%",
-          background: "#ffffff33",
-          transform: "translateZ(-30vmin) rotateY(30deg) rotateX(30deg)",
+          fontSize: "7vmin",
+          fontWeight: "bold",
+          padding: "2vmin 5vmin",
+          background: "#ffffffcc",
+          borderRadius: "1vmin",
+          display: "block",
+          margin: "5vmin auto",
+          outline: "none",
         }}
       >
-        <text
-          fontWeight="bold"
-          textAnchor="start"
-          fontFamily="Helvetica, Arial, sans-serif"
-          fontSize="216"
-          y="204"
-          x="52"
-          strokeWidth="8"
-          stroke="#7AD6CA"
-          fill="#0E353B"
-        >
-          {timer.toString().padStart(2, "0")}&Prime;
-        </text>
-      </svg>
+        Play
+      </button>
     </div>
   );
 }
 
-ReactDOM.render(
-  <>
-    <Canvas concurrent>
-      <Suspense fallback={<group />}>
-        <Game />
-      </Suspense>
-    </Canvas>
-    <Hud />
-  </>,
-  document.getElementById("game")
-);
+function App() {
+  const [Screen, setScreen] = useState(() => TitleScreen);
+  return <Screen setScreen={setScreen} />;
+}
+
+ReactDOM.render(<App />, document.getElementById("game"));
