@@ -325,7 +325,7 @@ function Hud({
     <>
       <div
         style={{
-          fontSize: "4vmin",
+          fontSize: "5vmin",
           padding: "2vmin",
           color: "white",
           zIndex: 1,
@@ -411,7 +411,7 @@ function EscapeSplash() {
       style={{
         placeSelf: "start center",
         color: "green",
-        fontSize: "15vmin",
+        fontSize: "20vmin",
         lineHeight: 3,
         zIndex: 1,
         animation: "victory 3s infinite linear",
@@ -434,7 +434,7 @@ function TimesUpSplash() {
     <div
       style={{
         color: "orange",
-        fontSize: "15vmin",
+        fontSize: "20vmin",
         lineHeight: 3,
         placeSelf: "start center",
         zIndex: 1,
@@ -526,7 +526,7 @@ function TitleScreen({ setScreen }: ScreenProps) {
       <div
         style={{
           width: "30vmin",
-          height: "45vmin",
+          height: "50vmin",
           background: "#eee",
           padding: "2vmin",
           transform:
@@ -535,10 +535,16 @@ function TitleScreen({ setScreen }: ScreenProps) {
           boxShadow: "0 0 3vmin white",
         }}
       >
-        <p style={{ fontSize: "3vmin", fontVariantCaps: "small-caps" }}>
+        <p
+          style={{
+            fontSize: "3.5vmin",
+            fontWeight: "bold",
+            fontVariantCaps: "small-caps",
+          }}
+        >
           Mission Briefing
         </p>
-        <div style={{ fontSize: "2vmin" }}>
+        <div style={{ fontSize: "2.5vmin" }}>
           <p>Escape with the secret documents before the enemy finds you.</p>
           <p>
             They will use any method necessary to stop you, even if it means
@@ -550,16 +556,17 @@ function TitleScreen({ setScreen }: ScreenProps) {
       </div>
       <div
         style={{
-          fontSize: "15vmin",
+          fontSize: "17vmin",
+          lineHeight: 1.2,
           color: "#222",
           textShadow: "0 0 1vmin white",
           textAlign: "center",
           placeSelf: "center",
           mixBlendMode: "luminosity",
-          transform: "rotateY(-20deg) translateX(15vmin) rotateX(10deg)",
+          transform: "rotateY(-30deg) translateX(20vmin) rotateX(10deg)",
         }}
       >
-        <div style={{ fontSize: "18vmin" }}>Danger</div>
+        <div style={{ fontSize: "20vmin" }}>Danger</div>
         in the City
         <button
           autoFocus
