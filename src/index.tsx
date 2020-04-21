@@ -9,18 +9,37 @@ const keys: Record<string, true> = {};
 document.addEventListener("keydown", (event) => (keys[event.key] = true));
 document.addEventListener("keyup", (event) => delete keys[event.key]);
 
-function Car({ onDead }: { onDead: () => void }) {
+function Car({
+  onEscaped,
+  onDead,
+}: {
+  onEscaped: () => void;
+  onDead: () => void;
+}) {
   const gltf = useLoader(GLTFLoader, carGltfUrl);
   const car = gltf.scene;
 
-  // COLLISIONS
-
+  const [escaped, setEscaped] = useState(false);
   const [colliding, setColliding] = useState(false);
   useEffect(() => {
     const interval = setInterval(() => {
       const towers =
         car.parent?.children.find((o) => o.children.length > 100)?.children ||
         [];
+
+      // ESCAPE
+
+      const radius = Math.abs(towers[0].children[0].position.x);
+      if (
+        Math.abs(car.position.x) > radius ||
+        Math.abs(car.position.z) > radius
+      ) {
+        setEscaped(true);
+        onEscaped();
+      }
+
+      // COLLISIONS
+
       const collision = towers
         .filter(
           (t) => t.children[0].position.manhattanDistanceTo(car.position) < 100
@@ -151,7 +170,7 @@ function Tower({
               direction: [Math.random() * 2 - 1, Math.random() * 2 - 1],
             }))
           ),
-        30 * 1000 * Math.random()
+        60 * 1000 * Math.random()
       );
       return () => clearTimeout(timeout);
     }
@@ -248,13 +267,19 @@ function Ground() {
   );
 }
 
-function Game({ onDead }: { onDead: () => void }) {
+function Game({
+  onEscaped,
+  onDead,
+}: {
+  onEscaped: () => void;
+  onDead: () => void;
+}) {
   return (
     <group>
       <ambientLight intensity={0.7} />
       <directionalLight position={[0, 0, -1]} intensity={0.3} />
       <directionalLight position={[0, 0, 1]} intensity={0.1} />
-      <Car onDead={onDead} />
+      <Car onEscaped={onEscaped} onDead={onDead} />
       <TowerGrid />
       <Ground />
     </group>
@@ -262,7 +287,7 @@ function Game({ onDead }: { onDead: () => void }) {
 }
 
 function Hud() {
-  const [timer, setTimer] = useState(30);
+  const [timer, setTimer] = useState(60);
   useEffect(() => {
     if (timer > 0) {
       const timeout = setTimeout(() => setTimer(timer - 1), 1000);
@@ -301,7 +326,6 @@ function Hud() {
 function DeathSplash() {
   return (
     <div
-      id="deathsplash"
       style={{
         width: "50vmin",
         height: "50vmin",
@@ -322,28 +346,62 @@ function DeathSplash() {
   );
 }
 
+function EscapeSplash() {
+  return (
+    <div
+      style={{
+        placeSelf: "start center",
+        color: "green",
+        fontSize: "15vmin",
+        lineHeight: 3,
+        zIndex: 1,
+        animation: "victory 3s infinite linear",
+      }}
+    >
+      <style>{`
+        @keyframes victory {
+          from { transform: rotateY(0deg) scale(1); }
+          50% { transform: rotateY(180deg) scale(.7); }
+          to { transform: rotateY(360deg) scale(1); }
+        }
+      `}</style>
+      Victory!
+    </div>
+  );
+}
+
 type ScreenProps = {
   setScreen: (screen: () => (props: ScreenProps) => JSX.Element) => void;
 };
 
 function GameScreen({ setScreen }: ScreenProps) {
+  const [escaped, setEscaped] = useState(false);
   const [dead, setDead] = useState(false);
+
   useEffect(() => {
-    if (dead) {
-      const timeout = setTimeout(() => {
-        setScreen(() => TitleScreen);
-      }, 1000);
+    if (escaped || dead) {
+      const timeout = setTimeout(
+        () => {
+          setScreen(() => TitleScreen);
+        },
+        escaped ? 5000 : 2000
+      );
       return () => clearTimeout(timeout);
     }
   });
+
   return (
     <>
       <Canvas concurrent>
         <Suspense fallback={<group />}>
-          <Game onDead={() => setDead(true)} />
+          <Game
+            onEscaped={() => setEscaped(true)}
+            onDead={() => setDead(true)}
+          />
         </Suspense>
       </Canvas>
-      {!dead && <Hud />}
+      {!escaped && !dead && <Hud />}
+      {escaped && <EscapeSplash />}
       {dead && <DeathSplash />}
     </>
   );
