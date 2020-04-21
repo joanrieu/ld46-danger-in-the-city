@@ -170,7 +170,7 @@ function Tower({
               direction: [Math.random() * 2 - 1, Math.random() * 2 - 1],
             }))
           ),
-        60 * 1000 * Math.random()
+        30 * 1000 * Math.random()
       );
       return () => clearTimeout(timeout);
     }
@@ -286,14 +286,25 @@ function Game({
   );
 }
 
-function Hud() {
-  const [timer, setTimer] = useState(60);
+function Hud({
+  frozen,
+  onElapsed,
+}: {
+  frozen: boolean;
+  onElapsed: () => void;
+}) {
+  const [timer, setTimer] = useState(3);
   useEffect(() => {
-    if (timer > 0) {
-      const timeout = setTimeout(() => setTimer(timer - 1), 1000);
-      return () => clearTimeout(timeout);
+    if (!frozen) {
+      if (timer > 0) {
+        const timeout = setTimeout(() => setTimer(timer - 1), 1000);
+        return () => clearTimeout(timeout);
+      } else {
+        onElapsed();
+      }
     }
   }, [timer]);
+
   return (
     <svg
       viewBox="0 0 434 257"
@@ -370,6 +381,30 @@ function EscapeSplash() {
   );
 }
 
+function TimesUpSplash() {
+  return (
+    <div
+      style={{
+        color: "orange",
+        fontSize: "15vmin",
+        lineHeight: 3,
+        placeSelf: "start center",
+        zIndex: 1,
+        animation: "timesup 3s infinite linear",
+      }}
+    >
+      <style>{`
+        @keyframes timesup {
+          from { transform: rotateY(0deg) scale(1); }
+          50% { transform: rotateY(180deg) scale(.7); }
+          to { transform: rotateY(360deg) scale(1); }
+        }
+      `}</style>
+      Time's up!
+    </div>
+  );
+}
+
 type ScreenProps = {
   setScreen: (screen: () => (props: ScreenProps) => JSX.Element) => void;
 };
@@ -377,6 +412,7 @@ type ScreenProps = {
 function GameScreen({ setScreen }: ScreenProps) {
   const [escaped, setEscaped] = useState(false);
   const [dead, setDead] = useState(false);
+  const [timesUp, setTimesUp] = useState(false);
 
   useEffect(() => {
     if (escaped || dead) {
@@ -384,7 +420,7 @@ function GameScreen({ setScreen }: ScreenProps) {
         () => {
           setScreen(() => TitleScreen);
         },
-        escaped ? 5000 : 2000
+        escaped || timesUp ? 5000 : 2000
       );
       return () => clearTimeout(timeout);
     }
@@ -400,9 +436,16 @@ function GameScreen({ setScreen }: ScreenProps) {
           />
         </Suspense>
       </Canvas>
-      {!escaped && !dead && <Hud />}
+      <Hud
+        frozen={escaped || dead}
+        onElapsed={() => {
+          setDead(true);
+          setTimesUp(true);
+        }}
+      />
       {escaped && <EscapeSplash />}
       {dead && <DeathSplash />}
+      {timesUp && <TimesUpSplash />}
     </>
   );
 }
