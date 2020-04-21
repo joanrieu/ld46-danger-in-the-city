@@ -313,32 +313,72 @@ function Hud({
     }
   }, [timer, visible]);
 
+  const [messageIndex, setMessageIndex] = useState(0);
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setMessageIndex(((Math.random() * 1000) | 0) % 10);
+    }, Math.random() * 5000 + 5000);
+    return () => clearTimeout(timeout);
+  }, [messageIndex]);
+
   return (
-    <svg
-      viewBox="0 0 434 257"
-      xmlns="http://www.w3.org/2000/svg"
-      style={{
-        placeSelf: "end start",
-        width: "30%",
-        background: "#ffffff33",
-        transform: "translateZ(-30vmin) rotateY(30deg) rotateX(30deg)",
-        mixBlendMode: "luminosity",
-      }}
-    >
-      <text
-        fontWeight="bold"
-        textAnchor="start"
-        fontFamily="Helvetica, Arial, sans-serif"
-        fontSize="216"
-        y="204"
-        x="52"
-        strokeWidth="8"
-        stroke="#7AD6CA"
-        fill="#0E353B"
+    <>
+      <div
+        style={{
+          fontSize: "4vmin",
+          padding: "2vmin",
+          color: "white",
+          zIndex: 1,
+          margin: "4vmin",
+          width: "60vmin",
+          placeSelf: "start end",
+          background: "rgba(0, 0, 0, .6)",
+          transform: "rotateZ(10deg) rotateY(-10deg) scale(.8)",
+        }}
       >
-        {(visible || frozen) && <>{timer.toString().padStart(2, "0")}&Prime;</>}
-      </text>
-    </svg>
+        {
+          [
+            "They're on your tracks, get going!",
+            "The enemy is right behind you!",
+            "They're destroying the whole neighborhood!",
+            "Hurry up! You'll regret staying here.",
+            "Come on, find a way out!",
+            "The fate of the agency is in your hands...",
+            "Faster!!",
+            "They hitting the buildings hard!",
+            "Get away at any cost!",
+            "Don't let us down, we put our faith in your hands!",
+          ][messageIndex]
+        }
+      </div>
+      <svg
+        viewBox="0 0 434 257"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{
+          placeSelf: "end start",
+          width: "30%",
+          background: "#ffffff33",
+          transform: "translateZ(-30vmin) rotateY(30deg) rotateX(30deg)",
+          mixBlendMode: "luminosity",
+        }}
+      >
+        <text
+          fontWeight="bold"
+          textAnchor="start"
+          fontFamily="Helvetica, Arial, sans-serif"
+          fontSize="216"
+          y="204"
+          x="52"
+          strokeWidth="8"
+          stroke="#7AD6CA"
+          fill="#0E353B"
+        >
+          {(visible || frozen) && (
+            <>{timer.toString().padStart(2, "0")}&Prime;</>
+          )}
+        </text>
+      </svg>
+    </>
   );
 }
 
