@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState, useLayoutEffect } from "react";
 import ReactDOM from "react-dom";
 import { Canvas, useFrame, useLoader, useResource } from "react-three-fiber";
 import { Color, Geometry, Group, Material, Mesh, Vector3 } from "three";
@@ -293,7 +293,7 @@ function Hud({
   frozen: boolean;
   onElapsed: () => void;
 }) {
-  const [timer, setTimer] = useState(3);
+  const [timer, setTimer] = useState(30);
   useEffect(() => {
     if (!frozen) {
       if (timer > 0) {
@@ -304,6 +304,14 @@ function Hud({
       }
     }
   }, [timer]);
+
+  const [visible, setVisible] = useState(true);
+  useLayoutEffect(() => {
+    if (timer > 0 && timer <= 10) {
+      const timeout = setTimeout(() => setVisible(!visible), timer * 50);
+      return () => clearTimeout(timeout);
+    }
+  }, [timer, visible]);
 
   return (
     <svg
@@ -328,7 +336,7 @@ function Hud({
         stroke="#7AD6CA"
         fill="#0E353B"
       >
-        {timer.toString().padStart(2, "0")}&Prime;
+        {(visible || frozen) && <>{timer.toString().padStart(2, "0")}&Prime;</>}
       </text>
     </svg>
   );
@@ -437,7 +445,7 @@ function GameScreen({ setScreen }: ScreenProps) {
         </Suspense>
       </Canvas>
       <Hud
-        frozen={escaped || dead}
+        frozen={escaped || dead || timesUp}
         onElapsed={() => {
           setDead(true);
           setTimesUp(true);
