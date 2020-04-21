@@ -485,6 +485,31 @@ function TitleScreen({ setScreen }: ScreenProps) {
       </Suspense>
       <div
         style={{
+          width: "30vmin",
+          height: "45vmin",
+          background: "#eee",
+          padding: "2vmin",
+          transform:
+            "rotateY(20deg) rotateX(20deg) rotateZ(-20deg) translateX(15vmin) translateY(5vmin) scale(0.8)",
+          border: "1vmin solid maroon",
+          boxShadow: "0 0 3vmin white",
+        }}
+      >
+        <p style={{ fontSize: "3vmin", fontVariantCaps: "small-caps" }}>
+          Mission Briefing
+        </p>
+        <div style={{ fontSize: "2vmin" }}>
+          <p>Escape with the secret documents before the enemy finds you.</p>
+          <p>
+            They will use any method necessary to stop you, even if it means
+            destroying every single building!
+          </p>
+          <p>Extreme caution advised.</p>
+          <p style={{ paddingLeft: "2vmin" }}>&mdash; X</p>
+        </div>
+      </div>
+      <div
+        style={{
           fontSize: "15vmin",
           color: "#222",
           textShadow: "0 0 1vmin white",
